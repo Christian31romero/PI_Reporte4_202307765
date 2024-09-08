@@ -1,59 +1,60 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from 'react-router-dom';
-import { useCookies } from 'react-cookie'
-import '../Styles/Styles.css'
+import '../Styles/Styles.css';
+
 function Login() {
-    const [carnet, setCarnet] = useState('')
-    const [password, setPassword] = useState('')
+    const [carnet, setCarnet] = useState('');
+    const [password, setPassword] = useState('');
 
-    const [cookies, setCookies] = useCookies(['usuario'])
-
-    const Navegador = useNavigate()
+    const Navegador = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if(carnet==="202307765" && password==="admin"){
-            Navegador('/admin') // opción para iniciar como admin (pendiente)
-        }else{
+        // Verificación de datos de administrador
+        if (carnet === "202307765" && password === "admin") {
             
-            const dataJson = {
-                carnet: carnet,
-                password: password
-            }
-            //-+-+-+-+-+-+-+-+-FETCH
-            fetch(`http://localhost:5000/login`, {
-                method: "POST", // Utiliza el método POST
-                body: JSON.stringify(dataJson), // Convierte el objeto 'data' a formato JSON y lo envía en el cuerpo de la solicitud
-                headers: {
-                    "Content-Type": "application/json", // Establece el tipo de contenido de la solicitud como JSON
-                },
-            })
-    
-                .then((response) => response.json())
-                .then((res) => {
-                    if (res.encontrado === true) {
-                        const dataUser = res.datos
-                        console.log(dataUser)
-                        alert(`Bienvenido ${dataUser.nombre}`)
-                        setCookies('usuario', dataUser)
-                        Navegador('/home')
-                    } else {
-                        alert("Credenciales incorrectas")
-                    }
-    
-                })
-                .catch((error) => console.error(error))
+            alert("Inicio de sesión como administrador exitoso");
+            Navegador('/admin'); // Redirige a la página de admin
+            return; 
         }
-        
-        //-+-++-+-+--+-+-+-+--+-+
-    }
 
+        // Datos del usuario
+        const dataJson = {
+            carnet: carnet,
+            password: password
+        };
+
+        fetch('http://localhost:5000/login', {
+            method: 'POST',
+            body: JSON.stringify(dataJson),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.mensaje === 'Inicio de sesión exitoso') {
+                console.log(data.datos);
+                alert(`Bienvenido`);
+                Navegador('/home');
+            } else {
+                alert(data.mensaje);
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Hubo un problema con el inicio de sesión');
+        });
+    };
 
     return (
         <div className="login-background">
-
-
             <div className="container-fluid h-100">
                 <div className="row align-items-center h-100">
                     <div className="col-md-6 mx-auto">
@@ -94,8 +95,8 @@ function Login() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-
 export default Login;
+

@@ -3,14 +3,14 @@ const express = require('express')
 const router = express.Router()
 
 
-const {SignUp, Login,} = require('../controllers/accesos')
+const {login, registro,} = require('../controllers/accesos')
 
 //GET
 
 
 //Post
-router.post('/registro', SignUp)
-router.post('/login', Login)
+router.post('/registro', registro)
+router.post('/login', login)
 
 
 

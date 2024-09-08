@@ -4,6 +4,12 @@ const cors = require('cors')
 const MyApp = express();
 
 const bodyParser = require('body-parser'); 
+
+const corsOptions = {
+    origin: 'http://localhost:3000'
+};
+
+MyApp.use(cors(corsOptions));
 MyApp.use(bodyParser.json({ limit: '15mb' }));
 
 MyApp.use(express.json())
