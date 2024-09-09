@@ -2,54 +2,55 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
-    //Determinar variables para almacenar en el apartado
-    const [carnet, setCarnet] = useState('')
-    const [nombre, setNombre] = useState('')
-    const [apellido, setApellido] = useState('')
-    const [correo, setCorreo] = useState('')
-    const [password, setPassword] = useState('')
+    // Determinar variables para almacenar los datos del formulario
+    const [carnet, setCarnet] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [correo, setCorreo] = useState('');
+    const [password, setPassword] = useState('');
 
-    //Definir la variable para navegar
-    const Navegador = useNavigate()
+    // Definir la variable para la navegación
+    const Navegador = useNavigate();
 
-    //Realizar la variable para los eventos del boton
+    // Manejar el evento de envío del formulario
     const handleSubmit = (event) => {
-        //Definir qué es lo que almacenará al presionar el botón (se almacena todo en un json)
         event.preventDefault();
-        
-        const dataJson = {
-            carnet: carnet,
-            nombre: nombre,
-            apellido: apellido,
-            correo: correo,
-            password: password
-        }
-        
 
-        //-------FETCH
-        fetch(`http://localhost:5000/registro`, {
-            method: "POST", // Utiliza el método POST
-            body: JSON.stringify(dataJson), // Convierte el objeto 'data' a formato JSON y lo envía en el cuerpo de la solicitud
+        const dataJson = {
+            //carnet: carnet,
+            name: nombre,
+            lname: apellido,
+            email: correo,
+            password: password
+        };
+
+        // Enviar la solicitud al backend
+        fetch('http://localhost:5000/registro', {
+            method: "POST", 
+            body: JSON.stringify(dataJson), 
             headers: {
-                "Content-Type": "application/json", // Establece el tipo de contenido de la solicitud como JSON
+                "Content-Type": "application/json",
             },
         })
-
-            .then((response) => response.json())
-            .then((res) => {
-                const dataUser = res.mensaje
-                console.log(dataUser)
-                alert(dataUser)
-                
-
-                Navegador('/login')
-
-
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+                return response.json();
             })
-            .catch((error) => console.error(error))
+            .then((res) => {
+                const mensaje = res.mensaje;
+                console.log(mensaje);
+                alert(mensaje); // Mostrar el mensaje de registro exitoso
 
-            
-    }
+                // Redirigir al usuario a la página de inicio de sesión
+                Navegador('/login');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Hubo un problema con el registro.');
+            });
+    };
 
     return (
         <div className="container-fluid h-100">
@@ -59,18 +60,6 @@ function Register() {
                         <div className="card-body">
                             <h2 className="card-title text-center mb-4">Registrarse</h2>
                             <form onSubmit={handleSubmit}>
-
-                            <div className="form-floating">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="floatInput"
-                                        placeholder="Ingrese su  carnet"
-                                        onChange={(e) => setCarnet(e.target.value)}
-                                        value={carnet}
-                                    />
-                                    <label>Carnet</label>
-                                </div>
                                 
                                 <div className="form-floating">
                                     <input
@@ -83,7 +72,6 @@ function Register() {
                                     />
                                     <label>Nombre</label>
                                 </div>
-
                                 <div className="form-floating">
                                     <input
                                         type="text"
@@ -95,7 +83,6 @@ function Register() {
                                     />
                                     <label>Apellido</label>
                                 </div>
-
                                 <div className="form-floating">
                                     <input
                                         type="text"
@@ -123,16 +110,15 @@ function Register() {
                                 </div>
                             </form>
                             <div>
-                                <h6>Ya tienes una cuenta?</h6>
-                                <h6><Link className="link text-skyblue" to="/login"> Inicia sesión </Link></h6>
+                                <h6>¿Ya tienes una cuenta?</h6>
+                                <h6><Link className="link text-skyblue" to="/login">Inicia sesión</Link></h6>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
-
+    );
 }
 
 export default Register;

@@ -7,10 +7,10 @@ exports.registro = (req, res) => {
   db.query(sql, [name, lname, password, email], (err, results) => {
     if (err) {
       console.error('Error al registrar el usuario:', err);
-      return res.status(500).send('Error al registrar el usuario');
+      return res.status(500).json({mensaje: 'Error al registrar el usuario'});
     }
     const carnet = results.insertId; 
-    res.status(201).send(`Usuario registrado exitosamente con carnet: ${carnet}`);
+    res.status(201).json({ mensaje: `Usuario registrado exitosamente con carnet: ${carnet}` });
   });
 };
 
@@ -24,7 +24,7 @@ exports.login = (req, res) => {
         return res.status(500).json({ mensaje: 'Error al iniciar sesión' });
       }
       if (results.length === 0) {
-        return res.status(401).json({ mensaje: 'Carnet o contraseña incorrectos' });
+        return res.status(401).json({ mensaje: 'Carnet o contraseña incorrecto' });
       }
       
       res.status(200).json({ mensaje: 'Inicio de sesión exitoso', datos: results[0] });
