@@ -1,10 +1,10 @@
 const db = require('../config/db'); 
 
-// Maneja la creación de una nueva publicación
+
 exports.crearPublicacion = (req, res) => {
   const { carnet, tipo_publicación, id_curso, id_catedratico, mensaje } = req.body;
   
-  // Asegurarse de que los campos necesarios estén presentes
+  // Verificacion de campos
   if (!tipo_publicación || !mensaje) {
     return res.status(400).json({ mensaje: 'Tipo de publicación y mensaje son obligatorios' });
   }

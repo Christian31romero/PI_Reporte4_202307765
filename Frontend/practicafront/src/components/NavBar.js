@@ -5,12 +5,12 @@ import { useNavigate, Link } from "react-router-dom";
 
 function NavBar() {
 
-    const [cookies, setCookies, removeCookie] = useCookies(['usuario'])
+    //const [cookies, setCookies, removeCookie] = useCookies(['usuario'])
 
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        removeCookie('usuario');
+        //removeCookie('usuario');
         navigate('/login');
     };
 
@@ -27,7 +27,7 @@ function NavBar() {
                 <ul className="link-list">
                     
                     <li className="link-list-item">
-                        <Link className="link" to="/createPost"> Crear post </Link> 
+                        <Link className="link" to="/crearP"> Crear publicación</Link> 
                     </li>
 
                 </ul>
