@@ -59,13 +59,13 @@ exports.obtenerPublicaciones = (req, res) => {
 
   let params = [];
 
-  // Filtrar por curso
+  // Filtrar por curso (tiene que recibir id)
   if (filtroCurso) {
       sql += " AND p.id_curso = ?";
       params.push(filtroCurso);
   }
 
-  // Filtrar por catedrático
+  // Filtrar por catedrático (tiene que recibir id)
   if (filtroCatedratico) {
       sql += " AND p.id_catedratico = ?";
       params.push(filtroCatedratico);
