@@ -1,12 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const {login, registro,} = require('../controllers/accesos')
-const {crearPublicacion} = require('../controllers/publicaciones')
+const {crearPublicacion, obtenerPublicaciones} = require('../controllers/publicaciones')
 const { getCursos, getCatedraticos } = require('../controllers/gets');
+
 
 //GET
 router.get('/getCursos', getCursos);
 router.get('/getCatedraticos', getCatedraticos);
+router.get('/getPublicaciones' , obtenerPublicaciones)
 
 //Post
 router.post('/registro', registro)

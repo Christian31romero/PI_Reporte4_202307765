@@ -45,3 +45,53 @@ exports.crearPublicacion = (req, res) => {
     });
   });
 };
+
+exports.obtenerPublicaciones = (req, res) => {
+  const { filtroCurso, filtroCatedratico, nombreCurso, nombreCatedratico } = req.query;
+
+  let sql = `
+      SELECT p.carnet, p.tipo_publicación, p.id_curso, p.id_catedratico, p.mensaje, p.fecha_creacion, c.nombre_curso, cat.nombre_catedratico
+      FROM publicaciones p
+      LEFT JOIN cursos c ON p.id_curso = c.id_curso
+      LEFT JOIN catedratico cat ON p.id_catedratico = cat.id_catedratico
+      WHERE 1=1
+  `;
+
+  let params = [];
+
+  // Filtrar por curso
+  if (filtroCurso) {
+      sql += " AND p.id_curso = ?";
+      params.push(filtroCurso);
+  }
+
+  // Filtrar por catedrático
+  if (filtroCatedratico) {
+      sql += " AND p.id_catedratico = ?";
+      params.push(filtroCatedratico);
+  }
+
+  // Filtrar por nombre del curso
+  if (nombreCurso) {
+      sql += " AND c.nombre_curso LIKE ?";
+      params.push(`%${nombreCurso}%`);
+  }
+
+  // Filtrar por nombre del catedrático
+  if (nombreCatedratico) {
+      sql += " AND cat.nombre_catedratico LIKE ?";
+      params.push(`%${nombreCatedratico}%`);
+  }
+
+  // Ordenar por fecha de creación (más recientes primero)
+  sql += " ORDER BY p.fecha_creacion DESC";
+
+  db.query(sql, params, (err, results) => {
+      if (err) {
+          console.error('Error al obtener publicaciones:', err);
+          return res.status(500).json({ mensaje: 'Error al obtener las publicaciones' });
+      }
+
+      res.json({ publicaciones: results });
+  });
+};
