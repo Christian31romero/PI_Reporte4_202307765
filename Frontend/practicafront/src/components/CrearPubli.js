@@ -29,20 +29,23 @@ function CrearPublicacion() {
     e.preventDefault();
 
     const publicacionData = {
-      tipo_publicacion: tipoPublicacion,
+      tipo_publicación: tipoPublicacion,
       id_curso: tipoPublicacion === 'Curso' ? idCurso : null,
       id_catedratico: tipoPublicacion === 'Catedratico' ? idCatedratico : null,
       mensaje,
     };
 
-    const token = localStorage.getItem('token'); // Obtener el token desde localStorage
+    console.log('Datos enviados al backend:', publicacionData);
+
+    const token = localStorage.getItem('token'); // Obtener el token 
+    console.log('Token:', token);
 
     try {
       const response = await fetch('http://localhost:5000/crearPubli', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, //Bearer por si no funciona
+          'Authorization': `Bearer ${token}`, 
         },
         body: JSON.stringify(publicacionData),
       });

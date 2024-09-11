@@ -15,7 +15,7 @@ function Login() {
         if (carnet === "202307765" && password === "admin") {
             
             alert("Inicio de sesión como administrador exitoso");
-            Navegador('/admin'); // Redirige a la página de admin
+            Navegador('/admin'); // Redirige a la página de admin (PENDIENTE)
             return; 
         }
 

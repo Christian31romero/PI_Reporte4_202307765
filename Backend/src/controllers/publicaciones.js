@@ -22,19 +22,22 @@ exports.crearPublicacion = (req, res) => {
     const carnet = decoded.carnet; // Obtener el carnet desde el token
     const { tipo_publicación, id_curso, id_catedratico, mensaje } = req.body;
 
-    if (!tipo_publicación || !mensaje) {
-      return res.status(400).json({ mensaje: 'Tipo de publicación y mensaje son obligatorios' });
-    }
+    /*if (!tipo_publicación || !mensaje) {
+      return res.status(400).json({ mensaje: 'Tipo de publicación y mensaje son obligatorios ' });
+    }*/
 
-    if (!['Curso', 'Catedratico'].includes(tipo_publicación)) {
+    /*if (!['Curso', 'Catedratico'].includes(tipo_publicación)) {
       return res.status(400).json({ mensaje: 'Tipo de publicación inválido' });
-    }
+    }*/
+
+    const idCurso = id_curso ? Number(id_curso) : null;
+    const idCatedratico = id_catedratico ? Number(id_catedratico) : null;
 
     const sql = 'INSERT INTO publicaciones (carnet, tipo_publicación, id_curso, id_catedratico, mensaje) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [carnet, tipo_publicación, id_curso || null, id_catedratico || null, mensaje], (err, results) => {
+    db.query(sql, [carnet, tipo_publicación, idCurso || null, idCatedratico || null, mensaje], (err, results) => {
       if (err) {
         console.error('Error al crear la publicación:', err);
-        return res.status(500).json({ mensaje: 'Error al crear la publicación' });
+        return res.status(500).json({ mensaje: 'Error al crear la publicacion' });
       }
 
       const id_publicacion = results.insertId;
