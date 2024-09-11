@@ -1,4 +1,6 @@
-const db = require('../config/db');  // Importa la conexión a la base de datos
+const db = require('../config/db');
+const jwt = require('jsonwebtoken');
+const secretKey = 'clave'
 
 // Maneja el registro de usuario
 exports.registro = (req, res) => {
@@ -16,17 +18,20 @@ exports.registro = (req, res) => {
 
 // Maneja el inicio de sesión
 exports.login = (req, res) => {
-    const { carnet, password } = req.body;  
-    const sql = 'SELECT * FROM usuarios WHERE carnet = ? AND password = ?';  
-    db.query(sql, [carnet, password], (err, results) => {
-      if (err) {
-        console.error('Error al iniciar sesión:', err);
-        return res.status(500).json({ mensaje: 'Error al iniciar sesión' });
-      }
-      if (results.length === 0) {
-        return res.status(401).json({ mensaje: 'Carnet o contraseña incorrecto' });
-      }
-      
-      res.status(200).json({ mensaje: 'Inicio de sesión exitoso', datos: results[0] });
-    });
-  };
+  const { carnet, password } = req.body;
+
+  // Verificar usuario en la base de datos (esto ya lo tienes)
+  const sql = 'SELECT * FROM usuarios WHERE carnet = ? AND password = ?';
+  db.query(sql, [carnet, password], (err, results) => {
+    if (err) {
+      return res.status(500).json({ mensaje: 'Error en el servidor' });
+    }
+    if (results.length > 0) {
+      // Generar el token JWT con el carnet del usuario
+      const token = jwt.sign({ carnet }, secretKey, { expiresIn: '1h' });
+      return res.status(200).json({ mensaje: 'Login exitoso', token });
+    } else {
+      return res.status(401).json({ mensaje: 'Credenciales incorrectas' });
+    }
+  });
+};

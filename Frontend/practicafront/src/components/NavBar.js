@@ -11,6 +11,7 @@ function NavBar() {
 
     const handleLogout = () => {
         //removeCookie('usuario');
+        localStorage.removeItem('token');
         navigate('/login');
     };
 

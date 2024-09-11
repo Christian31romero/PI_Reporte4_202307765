@@ -39,7 +39,8 @@ function Login() {
             return response.json();
         })
         .then((data) => {
-            if (data.mensaje === 'Inicio de sesión exitoso') {
+            if (data.mensaje === 'Login exitoso') {
+                localStorage.setItem('token', data.token);
                 console.log(data.datos);
                 alert(`Bienvenido`);
                 Navegador('/home');
