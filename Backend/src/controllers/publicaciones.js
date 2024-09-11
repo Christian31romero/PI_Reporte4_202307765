@@ -59,17 +59,19 @@ exports.obtenerPublicaciones = (req, res) => {
 
   let params = [];
 
-  // Filtrar por curso (tiene que recibir id)
-  if (filtroCurso) {
-      sql += " AND p.id_curso = ?";
-      params.push(filtroCurso);
-  }
+// Filtrar por curso (tiene que recibir id)
+if (filtroCurso) {
+  const idCurso = parseInt(filtroCurso, 10); // Parsear a entero
+  sql += " AND p.id_curso = ?";
+  params.push(idCurso);
+}
 
-  // Filtrar por catedrático (tiene que recibir id)
-  if (filtroCatedratico) {
-      sql += " AND p.id_catedratico = ?";
-      params.push(filtroCatedratico);
-  }
+// Filtrar por catedrático (tiene que recibir id)
+if (filtroCatedratico) {
+  const idCatedratico = parseInt(filtroCatedratico, 10); // Parsear a entero
+  sql += " AND p.id_catedratico = ?";
+  params.push(idCatedratico);
+}
 
   // Filtrar por nombre del curso
   if (nombreCurso) {
