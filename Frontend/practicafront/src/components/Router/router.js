@@ -3,6 +3,7 @@ import Login from '../Login'
 import Register from '../Register';
 import Home from '../Home';
 import CrearPublicacion from '../CrearPubli';
+import PerfilUsuario from '../PerfilUsuario'
 
 function Router(){
     return(
@@ -13,6 +14,7 @@ function Router(){
                 <Route path='/register' element={<Register/>} />
                 <Route path='/home' element={<Home/>} />
                 <Route path='/crearP' element={<CrearPublicacion/>} />
+                <Route path='/perfil/:carnet' element={<PerfilUsuario/>} />
             </Routes>
         </BrowserRouter>
     )
