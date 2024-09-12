@@ -50,7 +50,7 @@ exports.obtenerPublicaciones = (req, res) => {
   const { filtroCurso, filtroCatedratico, nombreCurso, nombreCatedratico } = req.query;
 
   let sql = `
-      SELECT p.carnet, p.tipo_publicación, p.id_curso, p.id_catedratico, p.mensaje, p.fecha_creacion, c.nombre_curso, cat.nombre_catedratico
+      SELECT p.id_publicacion, p.carnet, p.tipo_publicación, p.id_curso, p.id_catedratico, p.mensaje, p.fecha_creacion, c.nombre_curso, cat.nombre_catedratico
       FROM publicaciones p
       LEFT JOIN cursos c ON p.id_curso = c.id_curso
       LEFT JOIN catedratico cat ON p.id_catedratico = cat.id_catedratico
