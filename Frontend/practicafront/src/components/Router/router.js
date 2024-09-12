@@ -5,6 +5,7 @@ import Home from '../Home';
 import CrearPublicacion from '../CrearPubli';
 import PerfilUsuario from '../PerfilUsuario'
 import Comentarios from '../Comentarios';
+import Perfil from '../Perfil';
 
 function Router(){
     return(
@@ -17,6 +18,7 @@ function Router(){
                 <Route path='/crearP' element={<CrearPublicacion/>} />
                 <Route path='/perfil/:carnet' element={<PerfilUsuario/>} />
                 <Route path='/comentarios/:id_publicacion' element={<Comentarios/>} />
+                <Route path='/perfil' element={<Perfil/>} />
             </Routes>
         </BrowserRouter>
     )

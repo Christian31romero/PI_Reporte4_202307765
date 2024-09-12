@@ -57,9 +57,11 @@ function NavBar() {
                     Logout
                 </button>
                 <h1>.</h1>
-                <button className="btn btn-outline-info">
-                    Perfil
-                </button>
+                <Link to="/perfil">
+                    <button className="btn btn-outline-info">
+                        Perfil
+                    </button>
+                </Link>
             </div>
         </div>
     )
