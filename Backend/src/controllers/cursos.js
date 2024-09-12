@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const jwt = require('jsonwebtoken');
+const secretKey = 'clave'
 
 exports.obtenerCursosAprobados = (req, res) => {
   const carnet = parseInt(req.params.carnet);
@@ -37,6 +39,37 @@ exports.obtenerCursosAprobados = (req, res) => {
         cursos: results,
         totalCreditos: creditoResults[0].total_creditos || 0
       });
+    });
+  });
+};
+
+exports.agregarCursoAprobado = (req, res) => {
+  const { id_curso } = req.body;
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ mensaje: 'Token no proporcionado' });
+  }
+
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ mensaje: 'Token inválido' });
+    }
+
+    const carnet = decoded.carnet; // Obtener el carnet desde el token
+    const fecha_aprobacion = new Date(); // Fecha actual
+
+    const sql = `
+      INSERT INTO cursos_aprobados (carnet, id_curso, fecha_aprobacion)
+      VALUES (?, ?, ?)
+    `;
+
+    db.query(sql, [carnet, id_curso, fecha_aprobacion], (err, results) => {
+      if (err) {
+        console.error('Error al agregar curso aprobado:', err);
+        return res.status(500).json({ mensaje: 'Error al agregar curso aprobado' });
+      }
+      res.json({ mensaje: 'Curso aprobado agregado exitosamente' });
     });
   });
 };

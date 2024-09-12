@@ -4,7 +4,7 @@ const {login, registro,} = require('../controllers/accesos')
 const {crearPublicacion, obtenerPublicaciones} = require('../controllers/publicaciones')
 const { getCursos, getCatedraticos } = require('../controllers/gets');
 const {buscarUsuario, obtenerUsuario} = require('../controllers/usuarios')
-const {obtenerCursosAprobados} = require('../controllers/cursos')
+const {obtenerCursosAprobados, agregarCursoAprobado} = require('../controllers/cursos')
 const {crearComentario, obtenerComentarios} = require('../controllers/comentarios')
 
 //GET
@@ -21,6 +21,7 @@ router.post('/registro', registro)
 router.post('/login', login)
 router.post('/crearPubli', crearPublicacion)
 router.post('/crearComentario' , crearComentario)
+router.post('/agregarCursoAprobado', agregarCursoAprobado)
 
 
 
