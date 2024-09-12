@@ -3,7 +3,7 @@ const router = express.Router()
 const {login, registro,} = require('../controllers/accesos')
 const {crearPublicacion, obtenerPublicaciones} = require('../controllers/publicaciones')
 const { getCursos, getCatedraticos } = require('../controllers/gets');
-const {buscarUsuario} = require('../controllers/usuarios')
+const {buscarUsuario, obtenerUsuario} = require('../controllers/usuarios')
 const {obtenerCursosAprobados} = require('../controllers/cursos')
 const {crearComentario, obtenerComentarios} = require('../controllers/comentarios')
 
@@ -14,6 +14,7 @@ router.get('/getPublicaciones' , obtenerPublicaciones)
 router.get('/buscarUsuario/:carnet', buscarUsuario)
 router.get('/cursosAprobados/:carnet', obtenerCursosAprobados)
 router.get('/obtenerComentarios/:id_publicacion' , obtenerComentarios)
+router.get('/obtenerUsuario' , obtenerUsuario)
 
 //Post
 router.post('/registro', registro)
