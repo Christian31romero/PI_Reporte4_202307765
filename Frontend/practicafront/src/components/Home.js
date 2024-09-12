@@ -93,6 +93,12 @@ function Home() {
                             <p>Publicación de: {pub.carnet}</p>
                             <p>{pub.mensaje}</p>
                             <small className="text-muted">Fecha de creación: {new Date(pub.fecha_creacion).toLocaleString()}</small>
+                            <button
+                                onClick={() => navigate(`/comentarios/${pub.id_publicacion}`)}
+                                className="btn btn-info mt-2"
+                            >
+                                Ver Comentarios
+                            </button>
                         </div>
                     ))}
                 </div>
