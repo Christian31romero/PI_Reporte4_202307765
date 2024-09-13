@@ -73,3 +73,55 @@ exports.agregarCursoAprobado = (req, res) => {
     });
   });
 };
+
+// Función para obtener cursos aprobados y créditos totales del usuario
+exports.obtenerCursosAprobadosYCreditos = (req, res) => {
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ mensaje: 'Token no proporcionado' });
+  }
+
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(403).json({ mensaje: 'Token inválido' });
+    }
+
+    const carnet = decoded.carnet; // Obtener el carnet desde el token
+
+    const sqlCursos = `
+      SELECT c.id_curso, c.nombre_curso, ca.fecha_aprobacion
+      FROM cursos c
+      JOIN cursos_aprobados ca ON c.id_curso = ca.id_curso
+      WHERE ca.carnet = ?
+      ORDER BY ca.fecha_aprobacion ASC
+    `;
+
+    db.query(sqlCursos, [carnet], (err, cursos) => {
+      if (err) {
+        console.error('Error al obtener cursos aprobados:', err);
+        return res.status(500).json({ mensaje: 'Error al obtener cursos aprobados' });
+      }
+
+      const sqlCreditos = `
+        SELECT SUM(c.creditos) AS total_creditos
+        FROM cursos c
+        JOIN cursos_aprobados ca ON c.id_curso = ca.id_curso
+        WHERE ca.carnet = ?
+      `;
+
+      db.query(sqlCreditos, [carnet], (err, resultados) => {
+        if (err) {
+          console.error('Error al obtener créditos totales:', err);
+          return res.status(500).json({ mensaje: 'Error al obtener créditos totales' });
+        }
+
+        res.json({
+          cursos: cursos,
+          total_creditos: resultados[0].total_creditos
+        });
+      });
+    });
+  });
+};
+

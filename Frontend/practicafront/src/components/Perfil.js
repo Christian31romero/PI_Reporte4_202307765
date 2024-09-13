@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 function Perfil() {
   const [usuario, setUsuario] = useState(null);
+  const [cursos, setCursos] = useState([]);
+  const [totalCreditos, setTotalCreditos] = useState(0);
   const [idCurso, setIdCurso] = useState('');
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate();
@@ -27,7 +29,27 @@ function Perfil() {
       }
     };
 
+    const fetchCursosAprobadosYCreditos = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/cursosAprobadosYCreditos', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        if (response.ok) {
+          const result = await response.json();
+          setCursos(result.cursos);
+          setTotalCreditos(result.total_creditos);
+        } else {
+          alert('No se pudo obtener los cursos aprobados y créditos totales');
+        }
+      } catch (error) {
+        console.error('Error al obtener cursos aprobados y créditos:', error);
+      }
+    };
+
     fetchUsuario();
+    fetchCursosAprobadosYCreditos();
   }, []);
 
   const handleAgregarCurso = async (e) => {
@@ -44,6 +66,15 @@ function Perfil() {
       if (response.ok) {
         setMensaje('Curso aprobado agregado exitosamente');
         setIdCurso(''); // Limpiar el campo de entrada
+        // Volver a obtener los cursos aprobados y créditos totales
+        const result = await fetch('http://localhost:5000/cursosAprobadosYCreditos', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        const data = await result.json();
+        setCursos(data.cursos);
+        setTotalCreditos(data.total_creditos);
       } else {
         alert('Error al agregar curso aprobado');
       }
@@ -64,6 +95,31 @@ function Perfil() {
           <p><strong>Carnet:</strong> {usuario.carnet}</p>
         </div>
       </div>
+      <h2 className="mb-4">Cursos Aprobados</h2>
+      {cursos.length === 0 ? (
+        <div className="alert alert-info">No tiene cursos aprobados.</div>
+      ) : (
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>ID del Curso</th>
+              <th>Nombre del Curso</th>
+              <th>Fecha de Aprobación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cursos.map((curso) => (
+              <tr key={curso.id_curso}>
+                <td>{curso.id_curso}</td>
+                <td>{curso.nombre_curso}</td>
+                <td>{new Date(curso.fecha_aprobacion).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <h3 className="mt-4">Créditos Totales</h3>
+      <p>{totalCreditos} créditos</p>
       <form onSubmit={handleAgregarCurso} className="mb-4">
         <div className="form-group">
           <label htmlFor="idCurso">ID del Curso</label>
@@ -85,4 +141,3 @@ function Perfil() {
 }
 
 export default Perfil;
-
